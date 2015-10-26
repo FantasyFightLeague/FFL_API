@@ -1,4 +1,4 @@
-package com.ffl.api.DAL.DAO
+package com.ffl.api.DAO
 
 /**
  * Package: com.fullfacing.dsl.DAO

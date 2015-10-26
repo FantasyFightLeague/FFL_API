@@ -8,4 +8,4 @@ import java.util.UUID
  */
 case class User(email: String, password: Option[String], id: Option[String] = None)
 
-case class UserDetail(user: User, firstName: String, lastName: String, dateOfBirth: Long)
+case class UserDetail(user: User, firstName: String, lastName: String, dateOfBirth: Long, status: Boolean)

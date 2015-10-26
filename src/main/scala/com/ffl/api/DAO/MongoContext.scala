@@ -1,11 +1,11 @@
-package com.ffl.api.DAL.DAO
+package com.ffl.api.DAO
 
 import java.io.FileInputStream
 import java.util.Properties
 
 import com.ffl.api.Entity.EUser
-import com.mongodb.{ServerAddress, DBObject}
 import com.mongodb.casbah.{MongoClient, MongoDB}
+import com.mongodb.{DBObject, ServerAddress}
 import org.slf4j.LoggerFactory
 /**
  * Package: com.fullfacing.dsl.DAO
