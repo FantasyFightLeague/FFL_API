@@ -13,6 +13,8 @@ import scala.language.implicitConversions
 object FFLMongoDAO {
   def apply[A <: Model](coll: MongoCollection): MongoDAO[A] = new MongoDAO[A](coll)
 
+  implicit def DBQtoDBO(dBQuery: DBQuery):DBObject = dBQuery.operator1
+
   // USER AUTHENTICATION
   implicit val mapUser: Mappable[EUser, DBObject, DBObject] = MongoMapper[EUser]
 

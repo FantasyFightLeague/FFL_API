@@ -2,7 +2,7 @@ package com.ffl.api.DAO
 
 import com.ffl.api.DAO.Mapper.Mappable
 import com.mongodb.{BasicDBObject, DBObject}
-
+import com.mongodb.casbah.Imports._
 import scala.language.{higherKinds, implicitConversions}
 
 trait ModelWithId[A] { def copy(id: Option[String]):A }
@@ -34,15 +34,27 @@ object Operation extends Enumeration {
 
 }
 
-case class Field[A](name: String) {
-  def ===(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.Equals.toString, SingleValue(value).get))
-  def >(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.GreaterThan.toString, SingleValue(value).get))
-  def >=(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.GreaterThanOrEqual.toString, SingleValue(value).get))
-  def <(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.LessThan.toString, SingleValue(value).get))
-  def <=(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.LessOrEqual.toString, SingleValue(value).get))
-  def !==(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.NotEqual.toString, SingleValue(value).get))
-  def =!=(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.In.toString, ListValue(value).get))
-  def <*>(value: A): DBObject = new BasicDBObject(this.name, new BasicDBObject(Operation.Regex.toString, SingleValue(value).get))
+object Operator extends Enumeration{
+  type Operator = Value
+
+  val Or = Value("$or")
+  val And = Value("$and")
+}
+
+case class DBColumn[A](name: String) {
+  def ===(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.Equals.toString, SingleValue(value).get)))
+  def >(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.GreaterThan.toString, SingleValue(value).get)))
+  def >=(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.GreaterThanOrEqual.toString, SingleValue(value).get)))
+  def <(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.LessThan.toString, SingleValue(value).get)))
+  def <=(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.LessOrEqual.toString, SingleValue(value).get)))
+  def !==(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.NotEqual.toString, SingleValue(value).get)))
+  def =!=(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.In.toString, ListValue(value).get)))
+  def <*>(value: A): DBQuery = DBQuery(new BasicDBObject(this.name, new BasicDBObject(Operation.Regex.toString, SingleValue(value).get)))
+}
+
+case class DBQuery(operator1: DBObject){
+  def &&(operation2: DBObject): DBQuery = DBQuery($and(operator1, operation2))
+  def ||(operation2: DBObject): DBQuery = DBQuery($or(operator1, operation2))
 }
 
 trait Value[+A] { def get: A }

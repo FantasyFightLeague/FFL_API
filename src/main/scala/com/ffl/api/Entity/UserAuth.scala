@@ -11,13 +11,13 @@ import com.novus.salat.global._
  */
 // USER AUTHENTICATION
 object EUser extends AnyRef with Serializable {
-  object email extends DAO.Field[String]("email") {}
-  object password extends DAO.Field[String]("password") {}
-  object firstName extends DAO.Field[String]("firstName") {}
-  object lastName extends DAO.Field[String]("lastName") {}
-  object dateOfBirth extends DAO.Field[Long]("dateOfBirth") {}
-  object status extends DAO.Field[Boolean]("status") {}
-  object id extends DAO.Field[Option[String]]("id") {}
+  object email extends DAO.DBColumn[String]("email") {}
+  object password extends DAO.DBColumn[String]("password") {}
+  object firstName extends DAO.DBColumn[String]("firstName") {}
+  object lastName extends DAO.DBColumn[String]("lastName") {}
+  object dateOfBirth extends DAO.DBColumn[Long]("dateOfBirth") {}
+  object status extends DAO.DBColumn[Boolean]("status") {}
+  object id extends DAO.DBColumn[Option[String]]("id") {}
 }
 
 case class EUser(email: String, firstName: String, lastName: String,
